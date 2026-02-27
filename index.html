@@ -2,135 +2,172 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OxyX VIRTEX - DEADLY EDITION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Akari-Chan Virtex ✨ WhatsApp</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- SKULL ANIMATION BACKGROUND -->
-    <div class="skull-overlay"></div>
-    
-    <!-- BLOOD DRIP EFFECT -->
-    <div class="blood-drip"></div>
+    <!-- Akari Watanabe Background -->
+    <div class="anime-bg"></div>
+    <div class="floating-hearts"></div>
     
     <div class="container">
-        <!-- GLITCH HEADER -->
+        <!-- Header with Akari -->
         <div class="header">
-            <h1 class="glitch" data-text="☠️ OXYX VIRTEX ☠️">☠️ OXYX VIRTEX ☠️</h1>
-            <div class="warning-sign">
-                ⚠️ DEADLY WEAPON ⚠️
+            <div class="akari-avatar">
+                <img src="https://i.pinimg.com/736x/3b/3e/7b/3b3e7b9b3b3e7b9b3b3e7b9b3b3e7b9b.jpg" alt="Akari-chan" onerror="this.style.display='none'">
+                <div class="avatar-glow"></div>
             </div>
-            <div class="status-alert">
-                <span id="statusText">🔴 ARMED AND DANGEROUS</span>
+            <h1 class="anime-title">
+                <span class="pink">✨</span> 
+                AKARI-CHAN VIRTEX 
+                <span class="pink">✨</span>
+            </h1>
+            <div class="subtitle">
+                <span class="kawaii">🌸 kawaii edition 🌸</span>
+            </div>
+            <div class="status-badge">
+                <span class="dot"></span>
+                <span id="statusText">Online • Siap bantu Akari-chan!</span>
             </div>
         </div>
         
-        <!-- MAIN CONTROL PANEL -->
+        <!-- Main Control Panel -->
         <div class="main-content">
-            <!-- TARGET SECTION WITH SKULL ICONS -->
-            <div class="input-section">
-                <label class="neon-label">
-                    <span class="skull-icon">💀</span> 
-                    TARGET NUMBER (with country code)
-                    <span class="skull-icon">💀</span>
+            <!-- Target Number -->
+            <div class="card">
+                <label class="anime-label">
+                    <span class="emoji">📱</span>
+                    Nomor Target (with country code)
+                    <span class="emoji">💕</span>
                 </label>
                 <div class="input-wrapper">
-                    <input type="text" id="targetNumber" placeholder="62xxx" value="62" maxlength="15">
-                    <div class="input-glow"></div>
+                    <input type="text" id="targetNumber" placeholder="628xxx" value="62" maxlength="15">
+                    <div class="input-focus-glow"></div>
                 </div>
-                
-                <!-- WEAPON SELECTOR -->
-                <label class="neon-label">
-                    <span class="weapon-icon">⚔️</span>
-                    CHOOSE YOUR WEAPON
-                    <span class="weapon-icon">⚔️</span>
+                <div class="helper-text">Contoh: 628123456789 (Indonesia)</div>
+            </div>
+            
+            <!-- Weapon Selector -->
+            <div class="card">
+                <label class="anime-label">
+                    <span class="emoji">⚔️</span>
+                    Pilih Tipe Virtex
+                    <span class="emoji">🌸</span>
                 </label>
                 <div class="select-wrapper">
                     <select id="virtexType">
-                        <option value="1">💀 TIER 1: INVISIBLE KILLER</option>
-                        <option value="2">👻 TIER 2: GHOST OVERLOAD</option>
-                        <option value="3">🔥 TIER 3: EMOJI MASSACRE</option>
-                        <option value="4">⚡ TIER 4: SYMBOL SLAUGHTER</option>
-                        <option value="5">☠️ TIER 5: DEATH COMBO</option>
+                        <option value="1">🌸 TIER 1: Pink Invisible (Ringan)</option>
+                        <option value="2">✨ TIER 2: Sparkle Ghost (Sedang)</option>
+                        <option value="3">💕 TIER 3: Love Emoji Bomb (Berat)</option>
+                        <option value="4">🌟 TIER 4: Star Symbol (Sangat Berat)</option>
+                        <option value="5">👘 TIER 5: Akari Special Combo (Max)</option>
                     </select>
-                    <div class="select-glow"></div>
+                    <div class="select-arrow">▼</div>
                 </div>
-                
-                <!-- ATTACK SETTINGS -->
-                <div class="attack-settings">
-                    <div class="setting-item">
-                        <label>🔁 ATTACK COUNT:</label>
-                        <div class="number-wrapper">
-                            <input type="number" id="jumlah" min="1" max="999" value="5">
-                            <div class="number-controls">
-                                <button class="num-up">▲</button>
-                                <button class="num-down">▼</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label>⏱️ DELAY (seconds):</label>
-                        <div class="number-wrapper">
-                            <input type="number" id="delay" min="0.1" max="10" step="0.1" value="1">
-                            <div class="number-controls">
-                                <button class="num-up">▲</button>
-                                <button class="num-down">▼</button>
-                            </div>
-                        </div>
+            </div>
+            
+            <!-- Attack Settings - Grid untuk HP -->
+            <div class="settings-grid">
+                <div class="card">
+                    <label class="anime-label">🔁 Jumlah</label>
+                    <div class="number-wrapper">
+                        <button class="num-btn minus" onclick="adjustJumlah(-1)">−</button>
+                        <input type="number" id="jumlah" min="1" max="100" value="5" readonly>
+                        <button class="num-btn plus" onclick="adjustJumlah(1)">+</button>
                     </div>
                 </div>
                 
-                <!-- NUKE BUTTON -->
-                <button id="sendBtn" class="nuke-button" onclick="kirimVirtex()">
-                    <span class="button-text">🚀 LAUNCH NUCLEAR ATTACK</span>
-                    <span class="button-glitch"></span>
+                <div class="card">
+                    <label class="anime-label">⏱️ Delay (detik)</label>
+                    <div class="number-wrapper">
+                        <button class="num-btn minus" onclick="adjustDelay(-0.5)">−</button>
+                        <input type="number" id="delay" min="0.5" max="5" step="0.5" value="1.5" readonly>
+                        <button class="num-btn plus" onclick="adjustDelay(0.5)">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="sendBtn" class="primary-btn" onclick="kirimVirtex()">
+                    <span class="btn-icon">🚀</span>
+                    Kirim Virtex
+                    <span class="btn-icon">✨</span>
                 </button>
                 
-                <!-- EMERGENCY STOP -->
-                <button id="emergencyStop" class="emergency-button" onclick="emergencyStop()" disabled>
-                    ⚠️ EMERGENCY ABORT ⚠️
+                <button id="emergencyStop" class="secondary-btn" onclick="emergencyStop()" disabled>
+                    <span class="btn-icon">⏹️</span>
+                    Stop
                 </button>
             </div>
             
-            <!-- BATTLE LOG -->
-            <div class="status-section">
-                <h3 class="log-title">
-                    <span class="pulse">⚡</span>
-                    BATTLE LOG
-                    <span class="pulse">⚡</span>
-                </h3>
-                <div id="logContainer" class="log-box">
-                    <p class="log-initial">☠️ System armed. Ready to kill. ☠️</p>
-                </div>
-                
-                <!-- LOG CONTROLS -->
-                <div class="log-controls">
-                    <button class="log-btn clear" onclick="clearLog()">🗑️ CLEAR LOG</button>
-                    <button class="log-btn export" onclick="exportLog()">📤 EXPORT LOG</button>
-                </div>
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="setJumlah(10)">
+                    <span class="badge">10x</span>
+                </button>
+                <button class="quick-btn" onclick="setJumlah(25)">
+                    <span class="badge">25x</span>
+                </button>
+                <button class="quick-btn" onclick="setJumlah(50)">
+                    <span class="badge">50x</span>
+                </button>
+                <button class="quick-btn" onclick="setDelay(0.5)">
+                    <span class="badge">0.5s</span>
+                </button>
+                <button class="quick-btn" onclick="setDelay(1)">
+                    <span class="badge">1s</span>
+                </button>
+                <button class="quick-btn" onclick="setDelay(2)">
+                    <span class="badge">2s</span>
+                </button>
             </div>
         </div>
         
-        <!-- DEATH COUNT -->
-        <div class="death-counter">
-            <span class="counter-label">TOTAL ATTACKS LAUNCHED:</span>
-            <span id="deathCount" class="counter-value">0</span>
+        <!-- Battle Log -->
+        <div class="log-section">
+            <div class="log-header">
+                <span class="log-title">
+                    <span class="pulse">📝</span>
+                    Log Activity
+                    <span class="pulse">📝</span>
+                </span>
+                <div class="log-actions">
+                    <button class="log-btn" onclick="clearLog()" title="Clear log">🗑️</button>
+                    <button class="log-btn" onclick="exportLog()" title="Export log">📥</button>
+                </div>
+            </div>
+            <div id="logContainer" class="log-box">
+                <div class="log-initial">🌸 Selamat datang, Akari-chan siap membantu! 🌸</div>
+            </div>
         </div>
         
-        <!-- WARNING FOOTER -->
+        <!-- Stats Counter -->
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Total Dikirim:</span>
+                <span id="deathCount" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Session:</span>
+                <span id="sessionCount" class="stat-value">0</span>
+            </div>
+        </div>
+        
+        <!-- Footer -->
         <div class="footer">
-            <div class="warning-scroll">
-                ⚠️ WARNING: THIS TOOL IS FOR EDUCATIONAL PURPOSES ONLY • USE AT YOUR OWN RISK • DEVELOPER NOT RESPONSIBLE FOR MISUSE ⚠️
+            <div class="footer-text">
+                <span>🌸 With love from Akari-chan 🌸</span>
             </div>
-            <div class="version">OxyX DEADLY EDITION v2.0</div>
+            <div class="disclaimer">
+                Untuk edukasi • Jangan disalahgunakan • By OxyX
+            </div>
         </div>
     </div>
     
-    <!-- HIDDEN ELEMENTS -->
-    <div class="hidden-elements">
-        <audio id="explosionSound" src="data:audio/wav;base64,UklGR..."></audio>
-    </div>
+    <!-- Audio elements (hidden) -->
+    <audio id="sendSound" preload="auto" style="display:none"></audio>
     
     <script src="script.js"></script>
 </body>
