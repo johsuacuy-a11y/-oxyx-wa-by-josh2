@@ -1,0 +1,667 @@
+/* RESET & BASE STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace;
+}
+
+body {
+    min-height: 100vh;
+    background: #000000;
+    position: relative;
+    overflow-x: hidden;
+    animation: bodyPulse 4s infinite;
+}
+
+/* SKULL BACKGROUND OVERLAY */
+.skull-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255, 0, 0, 0.03) 20px,
+        rgba(255, 0, 0, 0.03) 40px
+    );
+    pointer-events: none;
+    z-index: 0;
+    animation: skullMove 10s linear infinite;
+}
+
+.skull-overlay::before {
+    content: "💀☠️💀☠️💀☠️💀☠️";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 40px;
+    color: rgba(255, 0, 0, 0.05);
+    white-space: nowrap;
+    animation: skullFloat 20s linear infinite;
+}
+
+/* BLOOD DRIP EFFECT */
+.blood-drip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 0, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+    animation: bloodPulse 3s infinite;
+}
+
+.blood-drip::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 30px,
+        rgba(255, 0, 0, 0.1) 30px,
+        rgba(255, 0, 0, 0.1) 60px
+    );
+    animation: drip 2s infinite;
+}
+
+/* MAIN CONTAINER */
+.container {
+    position: relative;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
+    background: rgba(10, 0, 0, 0.95);
+    border: 3px solid #ff0000;
+    border-radius: 20px;
+    box-shadow: 
+        0 0 30px #ff0000,
+        inset 0 0 50px rgba(255, 0, 0, 0.3);
+    z-index: 10;
+    animation: containerPulse 2s infinite;
+}
+
+/* GLITCH HEADER */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.glitch {
+    font-size: 3em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ff0000;
+    text-shadow: 
+        3px 3px 0 #00ff00,
+        -3px -3px 0 #0000ff;
+    animation: glitch 1s infinite;
+    position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    color: #00ff00;
+    z-index: -1;
+    animation: glitchOffset 0.3s infinite;
+}
+
+.glitch::after {
+    color: #0000ff;
+    z-index: -2;
+    animation: glitchOffset 0.2s infinite reverse;
+}
+
+.warning-sign {
+    color: #ff0000;
+    font-size: 1.2em;
+    margin: 10px 0;
+    padding: 10px;
+    border: 2px dashed #ff0000;
+    animation: blink 0.5s infinite;
+}
+
+.status-alert {
+    background: #1a0000;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 5px solid #ff0000;
+}
+
+#statusText {
+    color: #ff0000;
+    font-weight: bold;
+    animation: pulse 1s infinite;
+}
+
+/* INPUT SECTION */
+.input-section {
+    background: rgba(20, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #ff0000;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.input-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 0, 0, 0.1) 10px,
+        rgba(255, 0, 0, 0.1) 20px
+    );
+    animation: scan 10s linear infinite;
+}
+
+.neon-label {
+    display: block;
+    color: #ff6666;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+.skull-icon, .weapon-icon {
+    font-size: 1.4em;
+    animation: shake 0.5s infinite;
+}
+
+/* INPUT WRAPPER */
+.input-wrapper, .select-wrapper {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-wrapper input, .select-wrapper select {
+    width: 100%;
+    padding: 15px;
+    background: #0a0000;
+    border: 2px solid #ff0000;
+    color: #ff6666;
+    font-size: 1.2em;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+.input-wrapper input:focus, .select-wrapper select:focus {
+    box-shadow: 0 0 30px #ff0000;
+    border-color: #ff3333;
+}
+
+.input-glow, .select-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.3), transparent 70%);
+    filter: blur(10px);
+    z-index: 1;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.input-wrapper input:focus + .input-glow,
+.select-wrapper select:focus + .select-glow {
+    opacity: 1;
+}
+
+/* ATTACK SETTINGS */
+.attack-settings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.setting-item {
+    position: relative;
+}
+
+.setting-item label {
+    display: block;
+    color: #ff6666;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.number-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.number-wrapper input {
+    flex: 1;
+    padding: 12px;
+    background: #0a0000;
+    border: 2px solid #ff0000;
+    color: #ff6666;
+    font-size: 1.2em;
+    border-radius: 8px 0 0 8px;
+}
+
+.number-controls {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.number-controls button {
+    width: 40px;
+    height: 50%;
+    background: #2a0000;
+    border: 2px solid #ff0000;
+    border-left: none;
+    color: #ff0000;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: 0.3s;
+}
+
+.number-controls button:first-child {
+    border-radius: 0 8px 0 0;
+}
+
+.number-controls button:last-child {
+    border-radius: 0 0 8px 0;
+    border-top: none;
+}
+
+.number-controls button:hover {
+    background: #ff0000;
+    color: #000;
+}
+
+/* NUKE BUTTON */
+.nuke-button {
+    width: 100%;
+    padding: 25px;
+    background: linear-gradient(45deg, #2a0000, #4a0000, #6a0000, #8a0000);
+    border: 3px solid #ff0000;
+    color: #fff;
+    font-size: 1.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+    margin-bottom: 15px;
+    animation: nukePulse 2s infinite;
+}
+
+.nuke-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.1) 10px,
+        rgba(255, 255, 255, 0.1) 20px
+    );
+    animation: nukeScan 3s linear infinite;
+}
+
+.nuke-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 100px #ff0000;
+    border-color: #ff6666;
+}
+
+.nuke-button:active {
+    transform: scale(0.98);
+}
+
+.button-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.5), transparent);
+    animation: glitchSlide 2s infinite;
+}
+
+/* EMERGENCY BUTTON */
+.emergency-button {
+    width: 100%;
+    padding: 15px;
+    background: #000;
+    border: 3px solid #ff0000;
+    color: #ff0000;
+    font-size: 1.4em;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.emergency-button:enabled {
+    background: #ff0000;
+    color: #000;
+    animation: emergencyBlink 0.1s infinite;
+}
+
+.emergency-button:enabled:hover {
+    background: #ff6666;
+    box-shadow: 0 0 50px #ff0000;
+}
+
+/* BATTLE LOG */
+.status-section {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ff0000;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.log-title {
+    color: #ff0000;
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.pulse {
+    animation: pulse 1s infinite;
+}
+
+.log-box {
+    background: #0a0000;
+    border: 1px solid #ff0000;
+    border-radius: 10px;
+    padding: 15px;
+    height: 250px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.3);
+}
+
+.log-box p {
+    margin: 8px 0;
+    padding: 5px;
+    border-left: 3px solid #ff0000;
+    animation: logEntry 0.3s ease;
+}
+
+.log-initial {
+    color: #ff6666;
+    font-style: italic;
+}
+
+.log-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.log-btn {
+    flex: 1;
+    padding: 10px;
+    background: #1a0000;
+    border: 1px solid #ff0000;
+    color: #ff6666;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.log-btn:hover {
+    background: #ff0000;
+    color: #000;
+}
+
+/* DEATH COUNTER */
+.death-counter {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #0a0000;
+    border: 2px solid #ff0000;
+    border-radius: 10px;
+}
+
+.counter-label {
+    color: #ff6666;
+    font-size: 1.1em;
+    margin-right: 10px;
+}
+
+.counter-value {
+    color: #ff0000;
+    font-size: 2em;
+    font-weight: bold;
+    animation: counterPulse 1s infinite;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.warning-scroll {
+    color: #ff6666;
+    font-size: 0.9em;
+    padding: 10px;
+    border-top: 1px solid #ff0000;
+    border-bottom: 1px solid #ff0000;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: scrollText 15s linear infinite;
+}
+
+.version {
+    color: #330000;
+    margin-top: 10px;
+    font-size: 0.8em;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 10px;
+    background: #0a0000;
+}
+
+::-webkit-scrollbar-track {
+    border: 1px solid #ff0000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #ff0000, #660000);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ff3333;
+}
+
+/* ANIMATIONS */
+@keyframes bodyPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.1); }
+}
+
+@keyframes glitch {
+    0%, 100% { transform: skew(0deg); }
+    20% { transform: skew(5deg); }
+    40% { transform: skew(-5deg); }
+    60% { transform: skew(3deg); }
+    80% { transform: skew(-3deg); }
+}
+
+@keyframes glitchOffset {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(3px, -3px); }
+    60% { transform: translate(-2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes blink {
+    0%, 100% { border-color: #ff0000; }
+    50% { border-color: transparent; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(10deg); }
+    40% { transform: rotate(-10deg); }
+    60% { transform: rotate(5deg); }
+    80% { transform: rotate(-5deg); }
+}
+
+@keyframes scan {
+    0% { transform: translate(-50%, -50%) rotate(45deg); }
+    100% { transform: translate(50%, 50%) rotate(45deg); }
+}
+
+@keyframes nukePulse {
+    0%, 100% { box-shadow: 0 0 30px #ff0000; }
+    50% { box-shadow: 0 0 80px #ff0000; }
+}
+
+@keyframes nukeScan {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(50%, 50%) rotate(360deg); }
+}
+
+@keyframes glitchSlide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes emergencyBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes logEntry {
+    0% { transform: translateX(-20px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes counterPulse {
+    0%, 100% { text-shadow: 0 0 20px #ff0000; }
+    50% { text-shadow: 0 0 40px #ff0000; }
+}
+
+@keyframes scrollText {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+@keyframes skullFloat {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes skullMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+
+@keyframes bloodPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes drip {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes containerPulse {
+    0%, 100% { border-color: #ff0000; }
+    50% { border-color: #ff6666; }
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .glitch {
+        font-size: 2em;
+    }
+    
+    .attack-settings {
+        grid-template-columns: 1fr;
+    }
+    
+    .nuke-button {
+        font-size: 1.2em;
+        padding: 20px;
+    }
+    
+    .log-controls {
+        flex-direction: column;
+    }
+}
+
+/* BLOOD SPLATTER ON HOVER */
+.nuke-button:hover ~ .blood-drip::after {
+    animation: heavyDrip 0.5s infinite;
+}
+
+@keyframes heavyDrip {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
