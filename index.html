@@ -3,50 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OxyX Virtex Sender - WhatsApp</title>
+    <title>OxyX VIRTEX - DEADLY EDITION</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- SKULL ANIMATION BACKGROUND -->
+    <div class="skull-overlay"></div>
+    
+    <!-- BLOOD DRIP EFFECT -->
+    <div class="blood-drip"></div>
+    
     <div class="container">
+        <!-- GLITCH HEADER -->
         <div class="header">
-            <h1>⚡ OxyX VIRTEX WA ⚡</h1>
-            <p>100% WORK • AMAN • GITHUB READY</p>
+            <h1 class="glitch" data-text="☠️ OXYX VIRTEX ☠️">☠️ OXYX VIRTEX ☠️</h1>
+            <div class="warning-sign">
+                ⚠️ DEADLY WEAPON ⚠️
+            </div>
+            <div class="status-alert">
+                <span id="statusText">🔴 ARMED AND DANGEROUS</span>
+            </div>
         </div>
         
+        <!-- MAIN CONTROL PANEL -->
         <div class="main-content">
+            <!-- TARGET SECTION WITH SKULL ICONS -->
             <div class="input-section">
-                <label>📱 NOMOR TARGET (with country code):</label>
-                <input type="text" id="targetNumber" placeholder="62xxx" value="62">
+                <label class="neon-label">
+                    <span class="skull-icon">💀</span> 
+                    TARGET NUMBER (with country code)
+                    <span class="skull-icon">💀</span>
+                </label>
+                <div class="input-wrapper">
+                    <input type="text" id="targetNumber" placeholder="62xxx" value="62" maxlength="15">
+                    <div class="input-glow"></div>
+                </div>
                 
-                <label>📝 PILIH JENIS VIRTEX:</label>
-                <select id="virtexType">
-                    <option value="1">💥 VIRTEX SUPER - CRASH WA (RECOMMENDED)</option>
-                    <option value="2">🔥 VIRTEX GHOST NAME - HILANGKAN NAMA</option>
-                    <option value="3">⚡ VIRTEX EMOJI BOM - FREEZE HP</option>
-                    <option value="4">💫 VIRTEX SYMBOL OVERLOAD - LAG BERAT</option>
-                    <option value="5">🎯 VIRTEX COMBINE - MAX DAMAGE</option>
-                </select>
+                <!-- WEAPON SELECTOR -->
+                <label class="neon-label">
+                    <span class="weapon-icon">⚔️</span>
+                    CHOOSE YOUR WEAPON
+                    <span class="weapon-icon">⚔️</span>
+                </label>
+                <div class="select-wrapper">
+                    <select id="virtexType">
+                        <option value="1">💀 TIER 1: INVISIBLE KILLER</option>
+                        <option value="2">👻 TIER 2: GHOST OVERLOAD</option>
+                        <option value="3">🔥 TIER 3: EMOJI MASSACRE</option>
+                        <option value="4">⚡ TIER 4: SYMBOL SLAUGHTER</option>
+                        <option value="5">☠️ TIER 5: DEATH COMBO</option>
+                    </select>
+                    <div class="select-glow"></div>
+                </div>
                 
-                <label>🔁 JUMLAH PENGIRIMAN:</label>
-                <input type="number" id="jumlah" min="1" max="50" value="5">
+                <!-- ATTACK SETTINGS -->
+                <div class="attack-settings">
+                    <div class="setting-item">
+                        <label>🔁 ATTACK COUNT:</label>
+                        <div class="number-wrapper">
+                            <input type="number" id="jumlah" min="1" max="999" value="5">
+                            <div class="number-controls">
+                                <button class="num-up">▲</button>
+                                <button class="num-down">▼</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label>⏱️ DELAY (seconds):</label>
+                        <div class="number-wrapper">
+                            <input type="number" id="delay" min="0.1" max="10" step="0.1" value="1">
+                            <div class="number-controls">
+                                <button class="num-up">▲</button>
+                                <button class="num-down">▼</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                <label>⏱️ DELAY (detik):</label>
-                <input type="number" id="delay" min="1" max="10" value="2">
+                <!-- NUKE BUTTON -->
+                <button id="sendBtn" class="nuke-button" onclick="kirimVirtex()">
+                    <span class="button-text">🚀 LAUNCH NUCLEAR ATTACK</span>
+                    <span class="button-glitch"></span>
+                </button>
                 
-                <button onclick="kirimVirtex()" id="sendBtn">🚀 EKSEKUSI VIRTEX</button>
+                <!-- EMERGENCY STOP -->
+                <button id="emergencyStop" class="emergency-button" onclick="emergencyStop()" disabled>
+                    ⚠️ EMERGENCY ABORT ⚠️
+                </button>
             </div>
             
+            <!-- BATTLE LOG -->
             <div class="status-section">
-                <h3>📊 STATUS PENGIRIMAN:</h3>
+                <h3 class="log-title">
+                    <span class="pulse">⚡</span>
+                    BATTLE LOG
+                    <span class="pulse">⚡</span>
+                </h3>
                 <div id="logContainer" class="log-box">
-                    <p>Siap menjalankan perintah, Tuanku...</p>
+                    <p class="log-initial">☠️ System armed. Ready to kill. ☠️</p>
+                </div>
+                
+                <!-- LOG CONTROLS -->
+                <div class="log-controls">
+                    <button class="log-btn clear" onclick="clearLog()">🗑️ CLEAR LOG</button>
+                    <button class="log-btn export" onclick="exportLog()">📤 EXPORT LOG</button>
                 </div>
             </div>
         </div>
         
-        <div class="footer">
-            <p>⚠️ HANYA UNTUK EDUKASI | GITHUB DEPLOY READY</p>
+        <!-- DEATH COUNT -->
+        <div class="death-counter">
+            <span class="counter-label">TOTAL ATTACKS LAUNCHED:</span>
+            <span id="deathCount" class="counter-value">0</span>
         </div>
+        
+        <!-- WARNING FOOTER -->
+        <div class="footer">
+            <div class="warning-scroll">
+                ⚠️ WARNING: THIS TOOL IS FOR EDUCATIONAL PURPOSES ONLY • USE AT YOUR OWN RISK • DEVELOPER NOT RESPONSIBLE FOR MISUSE ⚠️
+            </div>
+            <div class="version">OxyX DEADLY EDITION v2.0</div>
+        </div>
+    </div>
+    
+    <!-- HIDDEN ELEMENTS -->
+    <div class="hidden-elements">
+        <audio id="explosionSound" src="data:audio/wav;base64,UklGR..."></audio>
     </div>
     
     <script src="script.js"></script>
