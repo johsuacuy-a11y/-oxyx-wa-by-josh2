@@ -290,4 +290,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('jumlah').value = currentJumlah;
     document.getElementById('delay').value = currentDelay.toFixed(1);
     
-    // Prevent
+    // Prevent zoom on double tap
+    document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    // Handle enter key
+    document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !isAttacking) {
+            kirimVirtex();
+        }
+    });
+});
