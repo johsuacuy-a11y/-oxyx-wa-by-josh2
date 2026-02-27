@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OxyX Virtex Sender - WhatsApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ OxyX VIRTEX WA ⚡</h1>
+            <p>100% WORK • AMAN • GITHUB READY</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <label>📱 NOMOR TARGET (with country code):</label>
+                <input type="text" id="targetNumber" placeholder="62xxx" value="62">
+                
+                <label>📝 PILIH JENIS VIRTEX:</label>
+                <select id="virtexType">
+                    <option value="1">💥 VIRTEX SUPER - CRASH WA (RECOMMENDED)</option>
+                    <option value="2">🔥 VIRTEX GHOST NAME - HILANGKAN NAMA</option>
+                    <option value="3">⚡ VIRTEX EMOJI BOM - FREEZE HP</option>
+                    <option value="4">💫 VIRTEX SYMBOL OVERLOAD - LAG BERAT</option>
+                    <option value="5">🎯 VIRTEX COMBINE - MAX DAMAGE</option>
+                </select>
+                
+                <label>🔁 JUMLAH PENGIRIMAN:</label>
+                <input type="number" id="jumlah" min="1" max="50" value="5">
+                
+                <label>⏱️ DELAY (detik):</label>
+                <input type="number" id="delay" min="1" max="10" value="2">
+                
+                <button onclick="kirimVirtex()" id="sendBtn">🚀 EKSEKUSI VIRTEX</button>
+            </div>
+            
+            <div class="status-section">
+                <h3>📊 STATUS PENGIRIMAN:</h3>
+                <div id="logContainer" class="log-box">
+                    <p>Siap menjalankan perintah, Tuanku...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>⚠️ HANYA UNTUK EDUKASI | GITHUB DEPLOY READY</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
